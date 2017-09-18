@@ -6,14 +6,33 @@
 //  Copyright © 2017年 智衡宋. All rights reserved.
 //
 
+
+#define SCR_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCR_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+#define kNum 20
+
 #import "ViewController.h"
 #import <CoreImage/CoreImage.h>
 #import <AVFoundation/AVFoundation.h>
-@interface ViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate>
+#import <CoreMotion/CoreMotion.h>// 陀螺仪
+@interface ViewController ()<AVCaptureVideoDataOutputSampleBufferDelegate>{
+    CGFloat x;
+    CGFloat y;
+    CGFloat z;
+    
+    int CambtnX ;
+    int CambtnY ;
+    
+    BOOL isClick;// 判断按钮是否被点击
+}
+@property (nonatomic,strong)CMMotionManager *motionManager;// 陀螺仪
 @property (nonatomic,strong)AVCaptureSession *captureSession;
 @property (nonatomic,strong)AVCaptureDeviceInput *captureDeviceInput;
 @property (nonatomic,strong)AVCaptureStillImageOutput *captureStillImageOutput;
 @property (nonatomic,strong)AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
+// 拍照按钮
+@property (nonatomic,strong)UIButton *camBtn;
 @end
 
 @implementation ViewController
@@ -25,11 +44,74 @@
     
     [self szh_faceRecognitionFunction];
     [self szh_createConnection];
+    
+    [self.view addSubview:self.camBtn];
 }
 
 
 
 #pragma mark  -------------------  人脸识别功能
+
+- (UIButton *)camBtn
+{
+    if (_camBtn == nil) {
+        _camBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _camBtn.backgroundColor = [UIColor redColor ];
+        
+        CambtnX = [self getRandomNumber:kNum*2 to:SCR_WIDTH - (kNum*2)];
+        CambtnY = [self getRandomNumber:kNum*2 to:SCR_HEIGHT - (kNum*2)];
+        
+        _camBtn.frame = CGRectMake(CambtnX, CambtnY, kNum*2, kNum*2);
+        // 设置元角度
+        _camBtn.layer.cornerRadius = 20.0;
+        _camBtn.layer.borderWidth = 1.0;
+        _camBtn.layer.borderColor = [UIColor clearColor].CGColor;
+        _camBtn.clipsToBounds = TRUE;//去除边界
+        
+        [_camBtn setTitle:@"抓" forState:UIControlStateNormal];
+        [_camBtn addTarget:self action:@selector(takeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _camBtn;
+}
+
+#pragma mark 拍照
+- (void)takeButtonClick:(UIButton *)sender {
+    // 启动陀螺仪
+    [self useGyroPush];
+    isClick = 1;
+}
+
+#pragma mark - 获取陀螺仪的值
+- (void)useGyroPush
+{
+    //初始化全局管理对象
+    CMMotionManager *manager = [[CMMotionManager alloc] init];
+    self.motionManager = manager;
+    //判断陀螺仪可不可以，判断陀螺仪是不是开启
+    //    BOOL m = [manager isGyroActive];
+    if ([manager isGyroAvailable]){
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        //告诉manager，更新频率是100Hz
+        manager.gyroUpdateInterval = 0.01;
+        //Push方式获取和处理数据
+        [manager startGyroUpdatesToQueue:queue
+                             withHandler:^(CMGyroData *gyroData, NSError *error)
+         {
+             x = gyroData.rotationRate.x;
+             y = gyroData.rotationRate.y;
+             z = gyroData.rotationRate.z;
+             [manager stopGyroUpdates];
+         }];
+        
+    }
+}
+
+// 获取一个随机整数，范围在[from,to），包括from，不包括to
+- (int)getRandomNumber:(int)from to:(int)to
+{
+    return (int)(from + (arc4random() % (to - from + 1)));
+}
+
 
 - (void)szh_faceRecognitionFunction {
     
@@ -90,8 +172,6 @@
     [captureOutput setVideoSettings:settings];
     [self.captureSession addOutput:captureOutput];
     
-    
-    
     [_captureSession startRunning];
     
 }
@@ -100,13 +180,247 @@
 // 抽样缓存写入时所调用的委托程序
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     
-    NSLog(@"-----------");
+    
+    UIImage *img = [self imageFromSampleBuffer:sampleBuffer];
+    UIImage *image = [self fixOrientation:img];
+    
+    
+    // 人脸检测
+    NSArray *features = [self leftEyePositionsWithImage:image];
+    
+    
+    NSLog(@"----------- %@", features);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (features.count >0) {
+            for (int i=0;i<features.count; i++) {
+                
+                
+                NSValue *layerRect = features[i];
+                
+                CGRect originalRect = [layerRect CGRectValue];
+                
+                CGRect getRect = [self getUIImageViewRectFromCIImageRect:originalRect];
+                
+                _camBtn.frame = getRect;
+               
+                
+            }
+        }
+        
+    });
     
     
 }
 
 
+#pragma mark - 判断人脸
+- (NSArray *)leftEyePositionsWithImage:(UIImage *)sImage
+{
+    if (![self hasFace:sImage]) {
+        return nil;
+    }
+    
+    NSArray *features = [self detectFaceWithImage:sImage];
+    NSMutableArray *arrM = [NSMutableArray arrayWithCapacity:features.count];
+    for (CIFaceFeature *f in features) {
+        [arrM addObject:[NSValue valueWithCGRect:f.bounds]];
+    }
+    return arrM;
+}
 
+
+- (BOOL)hasFace:(UIImage *)sImage
+{
+    NSArray *features = [self detectFaceWithImage:sImage];
+    if (!features.count?YES:NO) {
+    }
+    return features.count?YES:NO;
+}
+
+-(NSArray *)judgeFac:(UIImage *)image
+{
+    NSArray *results = [self detectFaceWithImage:image];
+    return results;
+}
+#pragma mark - faceDetectorMethods
+/**识别脸部*/
+-(NSArray *)detectFaceWithImage:(UIImage *)faceImag
+{
+    //此处是CIDetectorAccuracyHigh，若用于real-time的人脸检测，则用CIDetectorAccuracyLow，更快
+    CIDetector *faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace
+                                                  context:nil
+                                                  options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
+    CIImage *ciimg = [CIImage imageWithCGImage:faceImag.CGImage];
+    NSArray *features = [faceDetector featuresInImage:ciimg];
+    return features;
+}
+
+
+
+
+
+/**
+ *  图片GIImage转换
+ *
+ *  @param originAllRect
+ *
+ *  @return
+ */
+- (CGRect)getUIImageViewRectFromCIImageRect:(CGRect)originAllRect
+{
+    
+    CGRect getRect = originAllRect;
+    
+    
+    
+    float scrSalImageW = 720/SCR_WIDTH;
+    float scrSalImageH = 1280/SCR_HEIGHT;
+    
+    getRect.size.width = originAllRect.size.width/scrSalImageW;
+    getRect.size.height = originAllRect.size.height/scrSalImageH;
+    
+    float hx = self.view.frame.size.width/720;
+    float hy = self.view.frame.size.height/1280;
+    
+    getRect.origin.x = originAllRect.origin.x*hx;//*hx
+    getRect.origin.y = (self.view.frame.size.height - originAllRect.origin.y*hy) - getRect.size.height;
+    
+    
+    return getRect;
+}
+
+
+- (NSArray *)facedetect:(CGImageRef)image {
+    
+    NSDictionary *imageOptions =  [NSDictionary dictionaryWithObject:@(5) forKey:CIDetectorImageOrientation];
+    CIImage *personciImage = [CIImage imageWithCGImage:image];
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:
+                          CIDetectorAccuracyHigh forKey:CIDetectorAccuracy];
+    CIDetector *faceDetector=[CIDetector detectorOfType:CIDetectorTypeFace context:nil options:opts];
+    NSArray *features = [faceDetector featuresInImage:personciImage options:imageOptions];
+    
+    if (features.count > 0) {
+        
+        
+        NSLog(@"检测到了人脸");
+        
+        
+    } else {
+        
+       NSLog(@"未检测到了人脸");
+        
+    }
+    
+    return features;
+}
+
+
+
+
+
+
+/**
+ 
+ 在该代理方法中，sampleBuffer是一个Core Media对象，可以引入Core Video供使用
+ 通过抽样缓存数据创建一个UIImage对象
+ 
+ */
+
+- (UIImage *)imageFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:imageBuffer];
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef videoImage = [temporaryContext createCGImage:ciImage fromRect:CGRectMake(0, 0, CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer))];
+    UIImage *result = [[UIImage alloc] initWithCGImage:videoImage scale:1.0 orientation:UIImageOrientationLeftMirrored];
+    CGImageRelease(videoImage);
+    return result;
+}
+
+
+/**
+ *  用来处理图片翻转90度
+ *
+ *  @param aImage
+ *
+ *  @return UIImage
+ */
+- (UIImage *)fixOrientation:(UIImage *)aImage
+{
+    // No-op if the orientation is already correct
+    if (aImage.imageOrientation == UIImageOrientationUp)
+        return aImage;
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        default:
+            break;
+    }
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        default:
+            break;
+    }
+    
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                                             CGImageGetColorSpace(aImage.CGImage),
+                                             CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+            break;
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+            break;
+    }
+    
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
 
 
 
