@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4792C44B63DA8E26219B8580 /* libPods-SZH_CoreImageDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */; };
 		A6691B121F6D071A00992419 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B111F6D071A00992419 /* main.m */; };
 		A6691B151F6D071A00992419 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B141F6D071A00992419 /* AppDelegate.m */; };
 		A6691B181F6D071A00992419 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B171F6D071A00992419 /* ViewController.m */; };
@@ -35,6 +36,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10D5D937BACEB5FA45647E79 /* Pods-SZH_CoreImageDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SZH_CoreImageDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SZH_CoreImageDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		942E6C8C2CF7E5FD16434E1D /* Pods-SZH_CoreImageDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SZH_CoreImageDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo.release.xcconfig"; sourceTree = "<group>"; };
 		A6691B0D1F6D071A00992419 /* SZH_CoreImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SZH_CoreImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6691B111F6D071A00992419 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A6691B131F6D071A00992419 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -58,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4792C44B63DA8E26219B8580 /* libPods-SZH_CoreImageDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E4D588D338FF0180F15FBA9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				10D5D937BACEB5FA45647E79 /* Pods-SZH_CoreImageDemo.debug.xcconfig */,
+				942E6C8C2CF7E5FD16434E1D /* Pods-SZH_CoreImageDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A5D5CCB54E0E7449B9011A51 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A6691B041F6D071A00992419 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +107,8 @@
 				A6691B291F6D071A00992419 /* SZH_CoreImageDemoTests */,
 				A6691B341F6D071A00992419 /* SZH_CoreImageDemoUITests */,
 				A6691B0E1F6D071A00992419 /* Products */,
+				3E4D588D338FF0180F15FBA9 /* Pods */,
+				A5D5CCB54E0E7449B9011A51 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,9 +171,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A6691B3A1F6D071A00992419 /* Build configuration list for PBXNativeTarget "SZH_CoreImageDemo" */;
 			buildPhases = (
+				0FBAC08A1850A784B27BF995 /* [CP] Check Pods Manifest.lock */,
 				A6691B091F6D071A00992419 /* Sources */,
 				A6691B0A1F6D071A00992419 /* Frameworks */,
 				A6691B0B1F6D071A00992419 /* Resources */,
+				2F40572268FC36F8DE67AE30 /* [CP] Embed Pods Frameworks */,
+				EA2BB2EF07FDAF26526289BE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -267,6 +294,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0FBAC08A1850A784B27BF995 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		2F40572268FC36F8DE67AE30 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA2BB2EF07FDAF26526289BE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A6691B091F6D071A00992419 /* Sources */ = {
@@ -422,6 +497,7 @@
 		};
 		A6691B3B1F6D071A00992419 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 10D5D937BACEB5FA45647E79 /* Pods-SZH_CoreImageDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SZH_CoreImageDemo/Info.plist;
@@ -433,6 +509,7 @@
 		};
 		A6691B3C1F6D071A00992419 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 942E6C8C2CF7E5FD16434E1D /* Pods-SZH_CoreImageDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SZH_CoreImageDemo/Info.plist;
