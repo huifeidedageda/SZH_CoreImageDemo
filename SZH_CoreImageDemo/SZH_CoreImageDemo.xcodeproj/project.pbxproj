@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4792C44B63DA8E26219B8580 /* libPods-SZH_CoreImageDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */; };
+		A641F1ED1F6F51CC00A78BEE /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A641F1EC1F6F51CC00A78BEE /* CoreImage.framework */; };
+		A641F1F01F6F547300A78BEE /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A641F1EF1F6F547300A78BEE /* test.jpg */; };
+		A641F1F21F6F5EC300A78BEE /* IMG_1018.JPG in Resources */ = {isa = PBXBuildFile; fileRef = A641F1F11F6F5EC300A78BEE /* IMG_1018.JPG */; };
 		A6691B121F6D071A00992419 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B111F6D071A00992419 /* main.m */; };
 		A6691B151F6D071A00992419 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B141F6D071A00992419 /* AppDelegate.m */; };
 		A6691B181F6D071A00992419 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6691B171F6D071A00992419 /* ViewController.m */; };
@@ -39,6 +42,9 @@
 		10D5D937BACEB5FA45647E79 /* Pods-SZH_CoreImageDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SZH_CoreImageDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SZH_CoreImageDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		942E6C8C2CF7E5FD16434E1D /* Pods-SZH_CoreImageDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SZH_CoreImageDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-SZH_CoreImageDemo/Pods-SZH_CoreImageDemo.release.xcconfig"; sourceTree = "<group>"; };
+		A641F1EC1F6F51CC00A78BEE /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		A641F1EF1F6F547300A78BEE /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		A641F1F11F6F5EC300A78BEE /* IMG_1018.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_1018.JPG; sourceTree = "<group>"; };
 		A6691B0D1F6D071A00992419 /* SZH_CoreImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SZH_CoreImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6691B111F6D071A00992419 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A6691B131F6D071A00992419 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A641F1ED1F6F51CC00A78BEE /* CoreImage.framework in Frameworks */,
 				4792C44B63DA8E26219B8580 /* libPods-SZH_CoreImageDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,9 +102,19 @@
 		A5D5CCB54E0E7449B9011A51 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A641F1EC1F6F51CC00A78BEE /* CoreImage.framework */,
 				862724016CB448A02F7200C3 /* libPods-SZH_CoreImageDemo.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A641F1EE1F6F547300A78BEE /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A641F1F11F6F5EC300A78BEE /* IMG_1018.JPG */,
+				A641F1EF1F6F547300A78BEE /* test.jpg */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 		A6691B041F6D071A00992419 = {
@@ -125,6 +142,7 @@
 		A6691B0F1F6D071A00992419 /* SZH_CoreImageDemo */ = {
 			isa = PBXGroup;
 			children = (
+				A641F1EE1F6F547300A78BEE /* Images */,
 				A6691B131F6D071A00992419 /* AppDelegate.h */,
 				A6691B141F6D071A00992419 /* AppDelegate.m */,
 				A6691B161F6D071A00992419 /* ViewController.h */,
@@ -234,6 +252,7 @@
 				TargetAttributes = {
 					A6691B0C1F6D071A00992419 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = K9LCV5Z527;
 						ProvisioningStyle = Automatic;
 					};
 					A6691B251F6D071A00992419 = {
@@ -276,6 +295,8 @@
 				A6691B201F6D071A00992419 /* LaunchScreen.storyboard in Resources */,
 				A6691B1D1F6D071A00992419 /* Assets.xcassets in Resources */,
 				A6691B1B1F6D071A00992419 /* Main.storyboard in Resources */,
+				A641F1F21F6F5EC300A78BEE /* IMG_1018.JPG in Resources */,
+				A641F1F01F6F547300A78BEE /* test.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,9 +521,11 @@
 			baseConfigurationReference = 10D5D937BACEB5FA45647E79 /* Pods-SZH_CoreImageDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K9LCV5Z527;
 				INFOPLIST_FILE = SZH_CoreImageDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "BibaoBaseUsing.SZH-CoreImageDemo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bizhibn.cgqbiz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -512,9 +535,11 @@
 			baseConfigurationReference = 942E6C8C2CF7E5FD16434E1D /* Pods-SZH_CoreImageDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K9LCV5Z527;
 				INFOPLIST_FILE = SZH_CoreImageDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "BibaoBaseUsing.SZH-CoreImageDemo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.bizhibn.cgqbiz;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -584,6 +609,7 @@
 				A6691B3C1F6D071A00992419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A6691B3D1F6D071A00992419 /* Build configuration list for PBXNativeTarget "SZH_CoreImageDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -592,6 +618,7 @@
 				A6691B3F1F6D071A00992419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A6691B401F6D071A00992419 /* Build configuration list for PBXNativeTarget "SZH_CoreImageDemoUITests" */ = {
 			isa = XCConfigurationList;
@@ -600,6 +627,7 @@
 				A6691B421F6D071A00992419 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
